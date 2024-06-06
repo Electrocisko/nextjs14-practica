@@ -3,10 +3,8 @@ import { prisma } from "@/app/libs/prismadb";
 import {revalidatePath} from "next/cache";
 
 
-export const createTodo = async (data: FormData) => {
+export const createTodo = async (title: string) => {
 
-console.log("Server Actions");
-const title = data.get("title") as string;
 await prisma.todo.create({
   data : {
     title: title
