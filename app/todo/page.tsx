@@ -1,5 +1,5 @@
 import {revalidatePath} from "next/cache";
-import { prisma } from "@/libs/prismadb";
+import { prisma } from "@/app/libs/prismadb";
 
 const TodoPage = async () => {
 const todos = await prisma.todo.findMany();
