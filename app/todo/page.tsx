@@ -1,12 +1,19 @@
-
-import { prisma } from "@/libs/prismadb"
+import {revalidatePath} from "next/cache";
+import { prisma } from "@/libs/prismadb";
 
 const TodoPage = async () => {
 const todos = await prisma.todo.findMany();
 
-const createTodo = async () => {
+const createTodo = async (data: FormData) => {
     'use server'
 console.log("Server Actions");
+const title = data.get("title") as string;
+await prisma.todo.create({
+  data : {
+    title: title
+  }
+})
+revalidatePath("/todo");
 }
 
   return (
