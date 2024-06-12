@@ -1,5 +1,6 @@
 'use server'
 import { prisma } from "@/app/libs/prismadb";
+import { error } from "console";
 import {revalidatePath} from "next/cache";
 
 
@@ -32,19 +33,29 @@ export const createTodo = async (title: string) => {
 }
 
 export const deleteTodo = async (id: string) => {
+
+ 
+
+  if (!id || !id.trim) {
+    return {
+      error: "Id is requiered (backend)"
+    }
+  }
     try {
-      const response = await prisma.todo.delete({
+    await prisma.todo.delete({
         where: {
           id,
         }
       })
+      revalidatePath("/todo");
       return {
-        status:"success"
+        status:"success",
+        error:""
       }
     } catch (error) {
       return {
         status: "error",
-        error: "Error in Server"
+        error: "Error can not deleted"
       }
     }
 }
