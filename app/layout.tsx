@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <main className="container mx-auto px-4">
-          <Toaster/>
+          <Toaster position="top-center" reverseOrder={false} toastOptions={{className: "w-full"}}/>
         {children}
         </main>
         </body>

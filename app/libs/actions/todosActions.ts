@@ -1,18 +1,16 @@
 'use server'
 import { prisma } from "@/app/libs/prismadb";
+import { todoZodSchema } from "@/app/zod-schema/todoZod";
 import { error } from "console";
 import {revalidatePath} from "next/cache";
-
+import { ZodError } from "zod";
 
 export const createTodo = async (title: string) => {
-
-  if (!title || !title.trim()) {
-    return {
-      status: "error",
-      error: "Title is requiered Server"
-    }
-  }
   try {
+    todoZodSchema.parse({title})
+
+
+
     await prisma.todo.create({
       data : {
         title: title
@@ -24,9 +22,11 @@ export const createTodo = async (title: string) => {
       error: "Todo successfully added"
     }
   } catch (error) {
-    return {
-      status: "error",
-      error: "Error in Server"
+    if (error instanceof ZodError) {
+      return {
+        status:"error",
+        error: error.issues[0].message
+      }
     }
   }
 
@@ -34,10 +34,9 @@ export const createTodo = async (title: string) => {
 
 export const deleteTodo = async (id: string) => {
 
- 
-
   if (!id || !id.trim) {
     return {
+      status:"error",
       error: "Id is requiered (backend)"
     }
   }
