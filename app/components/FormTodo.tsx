@@ -15,15 +15,16 @@ const FormTodo = () => {
   
       //todoZodSchema.parse({ title });
       const response  = await createTodo(title);
-
       console.log(response);
-      if (response.status=='error') {
-
+      if (!response.success) {
+    
+        toast.error(response.message);
+      } else {
+        toast.success('Successfully !')
       }
+     
 
 
-
-      toast.success('Successfully !')
     } catch (error) {
       if (error instanceof ZodError) {
         return error.issues.map((issue) => toast.error(issue.message));
