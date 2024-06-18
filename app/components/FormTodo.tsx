@@ -13,7 +13,7 @@ const FormTodo = () => {
     const title = data.get("title") as string;
     try {
   
-      //todoZodSchema.parse({ title });
+      todoZodSchema.parse({ title });
       const response  = await createTodo(title);
       console.log(response);
       if (!response.success) {
